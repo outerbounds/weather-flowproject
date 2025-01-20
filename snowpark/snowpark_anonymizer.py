@@ -6,7 +6,7 @@ from flowproject import BaseFlow
 
 @project(name=config_expr("flowconfig.project_name"))
 @trigger_on_finish(flow='SensorFlow')
-class SnowparkFlow(BaseFlow):
+class SnowparkAnonymizerFlow(BaseFlow):
 
     snowpark_config = Config("snowpark_config", default="snowpark.json")
     snowpark_session = Config("snowpark_session", default="snowpark_session.json")
@@ -15,7 +15,7 @@ class SnowparkFlow(BaseFlow):
     @pypi(python='3.11', packages={'snowflake': '1.0.2',
                                    'pandas': '2.2.3',
                                    'snowflake-snowpark-python': '1.26.0'})
-    @snowpark(**snowpark_config)
+    #@snowpark(**snowpark_config)
     @card
     @step
     def start(self):
@@ -27,8 +27,8 @@ class SnowparkFlow(BaseFlow):
         self.cols = df.columns
         for row in df.to_local_iterator():
             d = row.as_dict()
-            self.rows.append([d[c] for c in self.cols])
-        current.card.append(Markdown(f'# Table `{self.tablename}`'))
+            self.rows.append([d[c][0] if c == 'LASTNAME' else d[c] for c in self.cols])
+        current.card.append(Markdown(f'# Anonymized Data `{self.tablename}`'))
         current.card.append(Table(self.rows, headers=self.cols))
         self.next(self.end)
 
@@ -37,4 +37,4 @@ class SnowparkFlow(BaseFlow):
         pass
 
 if __name__ == "__main__":
-    SnowparkFlow()
+    SnowparkAnonymizerFlow()
