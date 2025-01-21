@@ -23,13 +23,13 @@ class WeatherVizFlow(BaseFlow):
     def start(self):
         self.timestamp = self.sensor_value
         print("Querying data for", self.timestamp)
-        latest_weather = self.query_snowflake(
+        self.latest_weather = self.query_snowflake(
             template=("bay_weather", [self.timestamp])
         )
         current.card.append(
             Markdown(f"# Temperatures in the Bay Area at {self.timestamp}")
         )
-        current.card.append(make_vegachart(latest_weather))
+        current.card.append(make_vegachart(self.latest_weather))
         self.next(self.end)
 
     @step
