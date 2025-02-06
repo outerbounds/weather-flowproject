@@ -32,13 +32,12 @@ class SnowparkAnonymizerFlow(BaseFlow):
             "snowflake-snowpark-python": "1.26.0",
         },
     )
-    # @snowpark(**snowpark_config)
+    @snowpark(**snowpark_config)
     @card
     @step
     def start(self):
-        # this step executes inside snowflake
         from snowflake.snowpark import Session
-
+        print('Executing inside Snowflake')
         sess = Session.builder.configs(self.snowpark_session).create()
         df = sess.table(self.tablename)
         self.rows = []

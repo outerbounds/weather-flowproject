@@ -1,6 +1,6 @@
 
 # @project name
-project_name = "demo_project"
+project_name = "weather_project"
 
 [data]
 # integration type

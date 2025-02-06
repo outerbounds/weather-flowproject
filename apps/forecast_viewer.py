@@ -1,5 +1,5 @@
 import streamlit as st
-from metaflow import Flow, Run
+from metaflow import Flow, Run, namespace
 from weather import forecastviz
 
 
@@ -8,7 +8,7 @@ def load_data(pathspec):
     data = Run(pathspec).data
     return data.forecasts, data.timestamp
 
-
+namespace(None)
 run = Flow("ForecastFlow").latest_successful_run
 st.markdown(f"🌈 Loading data from **{run.pathspec}**")
 forecasts, updated_at = load_data(run.pathspec)
