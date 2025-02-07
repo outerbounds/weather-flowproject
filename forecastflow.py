@@ -21,7 +21,7 @@ from flowproject import BaseFlow, snowflake
 @trigger_on_finish(flow="SensorFlow")
 class ForecastFlow(BaseFlow):
 
-    window = Parameter("window", default=10, help="past time window for forecast")
+    window = Parameter("window", default=15, help="past time window for forecast")
     qa_zipcode = Parameter(
         "qa_zipcode", default="02108", help="visualize this zipcode for sanity check"
     )
